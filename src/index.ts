@@ -1,11 +1,12 @@
 import http from 'http';
+import { router } from './router/router'
 
 const PORT = process.env.PORT || 4000;
 
 const server = http
   .createServer((request, response) => {
-    response.end('Hello world');
+    router(request, response);
   })
   .listen(PORT, () => {
-    console.log('Server port ---', PORT);
+    console.log(`Server: http://localhost:${PORT}`);
   });
