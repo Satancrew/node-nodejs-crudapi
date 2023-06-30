@@ -1,7 +1,8 @@
 import http from 'http';
-import { router } from './router/router'
+import { router } from './router/router';
+import 'dotenv/config';
 
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT;
 
 const server = http
   .createServer((request, response) => {
