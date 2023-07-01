@@ -61,7 +61,36 @@ export class Controller {
       return response.end(
         JSON.stringify({ message: `User with id ${userId} invalid` }),
       );
+    } catch (err) {
+      response.writeHead(500, headers);
+      console.log(err.message);
+      response.end(JSON.stringify({ message: `Server error` }));
+    }
+  };
 
+  removeUser = async (userId: string, response: ServerResponse) => {
+    try {
+      const validateId = validate(userId);
+
+      const user = validateId ? await dataBase.getUserById(userId) : false;
+
+      if (user) {
+        response.writeHead(204, headers);
+        await dataBase.deleteUser(user.id);
+        return response.end();
+      }
+
+      if (!user) {
+        response.writeHead(404, headers);
+        return response.end(
+          JSON.stringify({ message: `User with id ${userId} does not exist` }),
+        );
+      }
+
+      response.writeHead(400, headers);
+      return response.end(
+        JSON.stringify({ message: `User with id ${userId} invalid` }),
+      );
     } catch (err) {
       response.writeHead(500, headers);
       console.log(err.message);

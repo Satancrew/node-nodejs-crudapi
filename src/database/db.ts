@@ -23,6 +23,10 @@ export class DB {
   }
 
   async getUserById(userID: string) {
-    return this.users.find(({ id }) => id === userID);
+    return this.users.find(user => user.id === userID);
+  }
+
+  async deleteUser(userID: string) {
+    return this.users = this.users.filter(user => user.id !== userID);
   }
 }
