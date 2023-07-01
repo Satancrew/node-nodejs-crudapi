@@ -1,16 +1,9 @@
 import { ServerResponse } from 'http';
-import { User } from '../helpers/types';
+import { User, UserWithoutId } from '../helpers/types';
 import { v4 as uuidv4 } from 'uuid';
 
 export class DB {
-  users: User[] = [
-    {
-      id: '12345',
-      username: 'Vladimir',
-      age: 31,
-      hobbies: ['node', 'ts', 'stradanie'],
-    },
-  ];
+  users: User[] = [];
 
   async getUsers() {
     return this.users;
@@ -27,6 +20,16 @@ export class DB {
   }
 
   async deleteUser(userID: string) {
-    return this.users = this.users.filter(user => user.id !== userID);
+    return (this.users = this.users.filter(user => user.id !== userID));
+  }
+
+  async updateUser(user: UserWithoutId, id: string) {
+    const updatedUsers = this.users.map(el => {
+      return el.id === id ? { ...el, ...user, id } : el;
+    });
+
+    this.users = updatedUsers;
+
+    return this.getUserById(id);
   }
 }

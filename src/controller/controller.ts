@@ -97,4 +97,42 @@ export class Controller {
       response.end(JSON.stringify({ message: `Server error` }));
     }
   };
+
+  changeUser = async (
+    userId: string,
+    response: ServerResponse,
+    request: IncomingMessage,
+  ) => {
+    try {
+      const validateId = validate(userId);
+
+      if (validateId) {
+        const body = await getBodyRequest(request);
+        const data = JSON.parse(body.toString());
+
+        if (Object.keys(data).length === 3 && validateUser(data)) {
+          const newUser = await dataBase.updateUser(data, userId);
+
+          if (newUser) {
+            response.writeHead(200, headers);
+            return response.end(JSON.stringify(newUser));
+          }
+
+          response.writeHead(404, headers);
+          return response.end(
+            JSON.stringify({
+              message: `User with id ${userId} does not exist`,
+            }),
+          );
+        }
+
+        response.writeHead(400, headers);
+        return response.end(JSON.stringify({ message: 'Data is incorrect' }));
+      }
+    } catch (err) {
+      response.writeHead(500, headers);
+      console.log(err.message);
+      response.end(JSON.stringify({ message: `Server error` }));
+    }
+  };
 }

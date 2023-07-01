@@ -38,6 +38,16 @@ export const router = (request: IncomingMessage, response: ServerResponse) => {
       const userId = userArray[3];
       return newController.removeUser(userId, response);
     }
+
+    if (
+      request.method === "PUT" &&
+      request.url.split('/').length === 4 &&
+      request.url.startsWith('/api/users/')
+    ) {
+      const userArray = request.url.split('/');
+      const userId = userArray[3];
+      return newController.changeUser(userId, response, request);
+    }
   } catch (error) {}
   return response.end(JSON.stringify({ message: 'Path not found' }));
 };
