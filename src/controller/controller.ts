@@ -5,7 +5,6 @@ import { DB } from '../database/db';
 import { validate } from 'uuid';
 
 const dataBase = new DB();
-
 export class Controller {
   getAll = async (response: ServerResponse) => {
     try {

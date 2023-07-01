@@ -1,4 +1,3 @@
-import { ServerResponse } from 'http';
 import { User, UserWithoutId } from '../helpers/types';
 import { v4 as uuidv4 } from 'uuid';
 

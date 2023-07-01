@@ -1,5 +1,7 @@
 import { IncomingMessage, ServerResponse } from 'http';
 import { Controller } from '../controller/controller';
+import { headers } from '../helpers/consts';
+import { error } from 'console';
 
 const newController = new Controller();
 
@@ -30,7 +32,7 @@ export const router = (request: IncomingMessage, response: ServerResponse) => {
     }
 
     if (
-      request.method === "DELETE" &&
+      request.method === 'DELETE' &&
       request.url.split('/').length === 4 &&
       request.url.startsWith('/api/users/')
     ) {
@@ -40,7 +42,7 @@ export const router = (request: IncomingMessage, response: ServerResponse) => {
     }
 
     if (
-      request.method === "PUT" &&
+      request.method === 'PUT' &&
       request.url.split('/').length === 4 &&
       request.url.startsWith('/api/users/')
     ) {
@@ -48,6 +50,9 @@ export const router = (request: IncomingMessage, response: ServerResponse) => {
       const userId = userArray[3];
       return newController.changeUser(userId, response, request);
     }
-  } catch (error) {}
-  return response.end(JSON.stringify({ message: 'Path not found' }));
+    response.writeHead(404, headers);
+    return response.end(JSON.stringify({ message: 'Path not found' }));
+  } catch (err) {
+    console.log(err.message)
+  }
 };
