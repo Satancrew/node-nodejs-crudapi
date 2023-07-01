@@ -21,4 +21,8 @@ export class DB {
     this.users.push(newUser);
     return newUser;
   }
+
+  async getUserById(userID: string) {
+    return this.users.find(({ id }) => id === userID);
+  }
 }
