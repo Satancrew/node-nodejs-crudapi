@@ -4,6 +4,7 @@ import { User, UserWithoutId } from '../helpers/types';
 import { validate, v4 as uuidv4 } from 'uuid';
 
 let newUser;
+const randomId = 'dfsdf4q33c';
 
 describe('Get all users', () => {
   it('should return empty array', async () => {
@@ -24,7 +25,7 @@ describe('Create new user with POST', () => {
     username: 52,
     age: 'eleven',
     job: false,
-  }
+  };
 
   it('create new user and testing his data', async () => {
     const response = await request(server).post('/api/users').send(testUser);
@@ -38,7 +39,7 @@ describe('Create new user with POST', () => {
   it('got error when create user with wrong type', async () => {
     const response = await request(server).post('/api/users').send(wrongUser);
     expect(response.statusCode).toBe(400);
-  })
+  });
 });
 
 describe('Get created user with GET method', () => {
@@ -51,10 +52,27 @@ describe('Get created user with GET method', () => {
     expect(response.body.hobbies).toEqual(newUser.hobbies);
   });
   it('get error when we trying get user with wrong id', async () => {
-    const response = await request(server).get('/api/users/randomId');
+    const response = await request(server).get('/api/users/' + randomId);
     expect(response.statusCode).toBe(404);
-  })
+    expect(response.body).toEqual({
+      message: `User with id ${randomId} does not exist`,
+    });
+  });
+});
 
+describe('Delete user with Delete method', () => {
+  it('deleted user by his id', async () => {
+    const testingId = newUser.id;
+    const response = await request(server).delete('/api/users/' + testingId);
+    expect(response.statusCode).toBe(204);
+  });
+  it('get error when we trying delete user with wrong id', async () => {
+    const response = await request(server).get('/api/users/' + randomId);
+    expect(response.statusCode).toBe(404);
+    expect(response.body).toEqual({
+      message: `User with id ${randomId} does not exist`,
+    });
+  });
 });
 
 afterAll(async () => {
