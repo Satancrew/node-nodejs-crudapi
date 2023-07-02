@@ -24,7 +24,7 @@ export class Controller {
       const data = JSON.parse(body.toString());
 
       if (Object.keys(data).length === 3 && validateUser(data)) {
-        const newUser = dataBase.addUser(data);
+        const newUser = await dataBase.addUser(data);
         response.writeHead(201, headers);
         return response.end(JSON.stringify(newUser));
       }
